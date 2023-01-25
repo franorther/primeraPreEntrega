@@ -10,11 +10,13 @@ export class ProdutcManager {
   async getProdutcs(limit) {
     try {
       if (fs.existsSync(this.path)) {
+        console.log(this.path)
         const produtcs = await fs.promises.readFile(this.path, 'utf-8')
-        if(limit){
-          const produtcsJS = JSON.parse(produtcs).slice(0,limit)
+        if (limit) {
+          const produtcsJS = JSON.parse(produtcs).slice(0, limit)
+          //console.log("Entró")
           return produtcsJS
-        }else{
+        } else {
           const produtcsJS = JSON.parse(produtcs)
           return produtcsJS
         }
@@ -28,15 +30,17 @@ export class ProdutcManager {
   }
 
 
-  async addProdutc(title,description,code,price,stock,category,thumbnails,status) {
+  async addProdutc(product) {
+    const { title, description, code, price, stock, category, thumbnails, status } = product
     try {
       if (!title || !description || !price || !code || !stock || !category) {
-        return console.log('Error, incomplete product');
+        return 'Error, incompleted product';
       } else {
         const isCode = this.#evaluarCode(code)
         if (isCode) {
           console.log('That code already exist, try again')
         } else {
+          console.log("Entró")
           const produtc = {
             id: await this.#generarId(),
             title,
@@ -44,12 +48,15 @@ export class ProdutcManager {
             code,
             price,
             stock,
-            category, 
+            category,
             thumbnails: [],
             status: true,
           }
-          this.produtcs.push(produtc)
-          await fs.promises.writeFile(this.path, JSON.stringify(this.produtcs, null, 2))
+          const getProd = await this.getProdutcs()
+          getProd.push(produtc)
+          console.log(getProd)
+
+          await fs.promises.writeFile(this.path, JSON.stringify(getProd, null, 2))
         }
       }
     } catch (error) {
@@ -61,11 +68,11 @@ export class ProdutcManager {
     try {
       const gettingProd = await this.getProdutcs();
       console.log(gettingProd);
-      const produ = gettingProd.find((p)=> p.id === parseInt(idProdutc));
-      if(produ){
+      const produ = gettingProd.find((p) => p.id === parseInt(idProdutc));
+      if (produ) {
         console.log(produ)
         return produ
-      }else{
+      } else {
         return 'Product no found'
       }
     } catch (error) {
@@ -74,6 +81,7 @@ export class ProdutcManager {
   }
 
   async updateProdutc(idProdutc, change) {
+    console.log("Entró")
     let reading = await fs.promises.readFile(this.path, 'utf-8')
     reading = JSON.parse(reading)
     let produtc = await this.getProdutcById(idProdutc)
@@ -106,11 +114,12 @@ export class ProdutcManager {
   }
 
 
-  #generarId() {
+  async #generarId() {
+    const readProd = await this.getProdutcs()
     let id =
-      this.produtcs.length === 0
+      readProd.length === 0
         ? 1
-        : this.produtcs[this.produtcs.length - 1].id + 1
+        : readProd[readProd.length - 1].id + 1
     return id
   }
 

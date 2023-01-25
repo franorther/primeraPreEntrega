@@ -1,8 +1,8 @@
 import { Router } from "express";
-import { ProductManager } from '../src/productManager.js'
+import { ProdutcManager } from '../src/productManager.js'
 
 const router = Router();
-const productManager = new ProductManager('../src/archivos/products.json')
+const productManager = new ProdutcManager('../files/products.json')
 
 router.get('/', async (req, res) => {
     try {
@@ -31,35 +31,42 @@ router.get('/:pid', async (req, res) => {
     }
 })
 
-router.post('/', async(req, res) => {
+router.post('/', async (req, res) => {
     const product = req.body
     console.log(product)
-    const addProduct = await productManager.addProduct(product)
-    console.log(addProduct)
-    res.json({ message: 'Product added successfully', addProduct })
+    const addProduct = await productManager.addProdutc(product)
+    //console.log(addProduct)
+    if (addProduct === "Error, incompleted product") {
+        res.json({ message: addProduct })
+    } else {
+        res.json({ message: 'Product added successfully', addProduct })
+    }
+
 })
 
-router.put('/:pid', async(req, res) => {
-    const {idProduct} = req.params
+router.put('/:pid', async (req, res) => {
+    const { pid } = req.params;
+    console.log(typeof pid)
     const product = req.body
+    console.log(product)
     try {
-        const updateProduct = await productManager.updateProduct(idProduct, ...product)
+        const updateProduct = await productManager.updateProdutc(pid, product)
         console.log(updateProduct)
-        res.json({ message: 'Product updated successfully'})
+        res.json({ message: 'Product updated successfully' })
     } catch (error) {
-        console.log('error')
+        console.log(error)
         return error
     }
 })
 
-router.delete('/:pid', async(req, res) => {
-    const {idProduct} = req.params
+router.delete('/:pid', async (req, res) => {
+    const { pid } = req.params
     try {
-        const deleteProduct = await productManager.deleteProduct(idProduct)
+        const deleteProduct = await productManager.deleteProdutc(pid)
         console.log(deleteProduct)
-        res.json({ message: 'Product deleted'})
+        res.json({ message: 'Product deleted' })
     } catch (error) {
-        console.log('error')
+        console.log(error)
         return error
     }
 })

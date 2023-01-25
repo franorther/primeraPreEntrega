@@ -105,7 +105,7 @@ export class CartManager {
   async addProductToCartById(idCart, idProduct, quantity) {
     const read = await this.getCarts();
     const cart = read.find((c) => c.id === parseInt(idCart));
-    if (cart === undefined) return console.log("Not found")
+    if (cart === undefined) return "Not found";
     else {
       const index = read.indexOf(cart);
       if (read[index].products.find((p) => p.id === parseInt(idProduct))) {

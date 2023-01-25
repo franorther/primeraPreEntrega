@@ -1,0 +1,35 @@
+[
+  {
+    "id": 1,
+    "title": "producto 6465654656565",
+    "description": " prueba c",
+    "code": "abc13426546546543",
+    "price": 30330,
+    "stock": 25,
+    "category": "NoCate",
+    "thumbnails": [],
+    "status": true
+  },
+  {
+    "id": 4,
+    "title": "producto 6465654656565",
+    "description": " prueba c",
+    "code": "abc13426546546543",
+    "price": 30330,
+    "stock": 25,
+    "category": "NoCate",
+    "thumbnails": [],
+    "status": true
+  },
+  {
+    "id": 5,
+    "title": "producto 6465654656565",
+    "description": " prueba c",
+    "code": "abc13426546546543",
+    "price": 30330,
+    "stock": 25,
+    "category": "NxxxoCate",
+    "thumbnails": [],
+    "status": true
+  }
+]
